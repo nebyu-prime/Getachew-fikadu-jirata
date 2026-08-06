@@ -105,16 +105,21 @@ export default function VerifyPage() {
       const formattedTickets = [];
 
       for (const ticket of response.documents) {
+        console.log('Processing ticket:', ticket.$id, 'screenshot field:', ticket.screenshot);
         let screenshotUrl = null;
         if (ticket.screenshot) {
           try {
+            console.log('Fetching screenshot for ticket:', ticket.$id, 'fileId:', ticket.screenshot);
             screenshotUrl = await storage.getFileView(
               process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6765f8a9003adaa6d724',
               ticket.screenshot
             );
+            console.log('Screenshot URL fetched:', screenshotUrl);
           } catch (error) {
             console.error('Error fetching screenshot for ticket:', ticket.$id, error);
           }
+        } else {
+          console.log('No screenshot field for ticket:', ticket.$id);
         }
 
         formattedTickets.push({
