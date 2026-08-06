@@ -137,10 +137,14 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
         const storage = new Storage(client);
 
         console.log('Client initialized, uploading screenshot...');
+        console.log('paymentProof file:', paymentProof);
+        console.log('paymentProof size:', paymentProof?.size);
+        console.log('paymentProof type:', paymentProof?.type);
         // Upload screenshot to storage
         let screenshotFileId = null;
         if (paymentProof) {
           try {
+            console.log('Starting screenshot upload to bucket:', process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6765f8a9003adaa6d724');
             const file = await storage.createFile(
               process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6765f8a9003adaa6d724',
               ID.unique(),
@@ -150,8 +154,11 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
             console.log('Screenshot uploaded successfully:', screenshotFileId);
           } catch (screenshotError) {
             console.error('Screenshot upload failed, continuing without screenshot:', screenshotError);
+            console.error('Screenshot upload error details:', JSON.stringify(screenshotError, null, 2));
             // Continue without screenshot - don't fail the whole purchase
           }
+        } else {
+          console.log('No paymentProof file selected');
         }
 
         console.log('Creating ticket documents...');
