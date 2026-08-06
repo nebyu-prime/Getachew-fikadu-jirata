@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-manrope), 'Segoe UI', sans-serif;
+}
+::selection {
+  background: rgba(245, 196, 81, 0.35);
+  color: #f8fbff;
+}
+
+@layer components {
+  .glass-card {
+    @apply border border-white/10 bg-white/10 backdrop-blur-xl shadow-glass;
+  }
+
+  .surface-card {
+    @apply border border-white/10 bg-slate-950/55 shadow-glass;
+  }
+
+  .ekub-grid {
+    @apply grid gap-4;
+  }
+}

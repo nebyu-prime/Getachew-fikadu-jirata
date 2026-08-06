@@ -1,0 +1,181 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const message = body.message;
+    const callbackQuery = body.callback_query;
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+
+    if (!botToken) {
+      console.error('TELEGRAM_BOT_TOKEN not set');
+      return NextResponse.json({ error: 'Bot token not configured' }, { status: 500 });
+    }
+
+    // Handle callback queries (button clicks)
+    if (callbackQuery) {
+      const callbackData = callbackQuery.data;
+      const callbackChatId = callbackQuery.message.chat.id;
+      
+      if (callbackData === 'lang_amharic') {
+        await answerCallbackQuery(botToken, callbackQuery.id);
+        await sendMessage(botToken, callbackChatId,
+          'እንኳን እንነገርዎታለን! 🎉\n\n' +
+          'እባክዎ ስልክ ቁጥርዎን ይጻፉ።'
+        );
+      } else if (callbackData === 'lang_english') {
+        await answerCallbackQuery(botToken, callbackQuery.id);
+        await sendMessage(botToken, callbackChatId,
+          'Welcome! 🎉\n\n' +
+          'Please enter your phone number to continue.'
+        );
+      } else if (callbackData === 'lang_oromo') {
+        await answerCallbackQuery(botToken, callbackQuery.id);
+        await sendMessage(botToken, callbackChatId,
+          'Baga nagaan dhuftu! 🎉\n\n' +
+          'Fone bilbisa barreessuu.'
+        );
+      }
+      
+      return NextResponse.json({ ok: true });
+    }
+
+    // Handle regular messages
+    if (!message) {
+      return NextResponse.json({ ok: true });
+    }
+
+    const chatId = message.chat.id;
+    const text = message.text || '';
+
+    // Handle commands
+    if (text === '/start') {
+      await sendMessageWithKeyboard(botToken, chatId,
+        '🚗 Getachew Fikadu Jirata\n\n' +
+        'Maaloo Afaan filadhaa.\n' +
+        '━━━━━━━━━━━━━━\n' +
+        'እባክዎ ቋንቋ ይምረጡ።\n' +
+        '━━━━━━━━━━━━━━\n' +
+        'Please select your language.',
+        [
+          [
+            { text: 'አማርኛ', callback_data: 'lang_amharic' },
+            { text: 'English', callback_data: 'lang_english' },
+            { text: 'Afaan Oromoo', callback_data: 'lang_oromo' }
+          ]
+        ]
+      );
+    } else if (text.match(/^\+?[0-9]{9,15}$/)) {
+      // Handle phone number input
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://getachew-fikadu-jirata.vercel.app';
+      await sendMessageWithKeyboard(botToken, chatId,
+        '✅ Phone number received!\n\n' +
+        'Click the button below to open the app.',
+        [
+          [
+            { text: '🚗 Open App', web_app: { url: `${siteUrl}?phone=${text}` } }
+          ]
+        ]
+      );
+    } else if (text === '/help') {
+      await sendMessage(botToken, chatId,
+        '📖 Available commands:\n\n' +
+        '/start - Get started\n' +
+        '/help - Show this help message\n' +
+        '/tickets - Check your tickets\n' +
+        '/lotteries - View active lotteries'
+      );
+    } else if (text === '/tickets') {
+      await sendMessage(botToken, chatId,
+        '🎟️ To check your tickets:\n' +
+        '1. Visit our website\n' +
+        '2. Enter your phone number\n' +
+        '3. View your ticket status\n\n' +
+        '🔗 ' + (process.env.NEXT_PUBLIC_SITE_URL || 'https://your-site.com/tickets')
+      );
+    } else if (text === '/lotteries') {
+      await sendMessage(botToken, chatId,
+        '🚗 View all active lotteries at:\n' +
+        '🔗 ' + (process.env.NEXT_PUBLIC_SITE_URL || 'https://your-site.com')
+      );
+    } else {
+      await sendMessage(botToken, chatId,
+        '❓ I didn\'t understand that command.\n' +
+        'Type /help to see available commands.'
+      );
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error('Telegram webhook error:', error);
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
+  }
+}
+
+async function sendMessage(botToken: string, chatId: number, text: string) {
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+  
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: text,
+      parse_mode: 'HTML'
+    })
+  });
+}
+
+async function sendMessageWithKeyboard(botToken: string, chatId: number, text: string, keyboard: any[][]) {
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+  
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: text,
+      reply_markup: {
+        inline_keyboard: keyboard
+      }
+    })
+  });
+}
+
+async function answerCallbackQuery(botToken: string, callbackQueryId: string) {
+  const url = `https://api.telegram.org/bot${botToken}/answerCallbackQuery`;
+  
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      callback_query_id: callbackQueryId
+    })
+  });
+}
+
+// Handle webhook setup GET request
+export async function GET(req: NextRequest) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL;
+
+  if (!botToken || !webhookUrl) {
+    return NextResponse.json({ 
+      error: 'TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_URL must be set' 
+    }, { status: 400 });
+  }
+
+  try {
+    const url = `https://api.telegram.org/bot${botToken}/setWebhook`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: webhookUrl })
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to set webhook' }, { status: 500 });
+  }
+}
