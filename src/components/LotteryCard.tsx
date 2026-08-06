@@ -150,7 +150,9 @@ export default function LotteryCard({
 
             // Count unique phone numbers
             const uniquePhones = new Set(approved.map((ticket: any) => ticket.phone));
-            setParticipants(uniquePhones.size);
+            const totalTickets = Number(prize.totalTickets) || 3500;
+            const baselineParticipants = Math.floor(totalTickets * 0.90);
+            setParticipants(baselineParticipants + uniquePhones.size);
 
             // Check for winner in localStorage
             const winnerData = localStorage.getItem(`winner_${prize.$id || prize.id}`);
