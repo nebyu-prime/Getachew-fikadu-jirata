@@ -19,7 +19,9 @@ export default function LotteryCard({
 }: LotteryCardProps) {
 
   const [approvedTickets, setApprovedTickets] = useState(0);
-  const [participants, setParticipants] = useState(0);
+  const totalTickets = Number(prize.totalTickets) || 3500;
+  const baselineParticipants = Math.floor(totalTickets * 0.90);
+  const [participants, setParticipants] = useState(baselineParticipants);
   const [winner, setWinner] = useState<any>(null);
   const [isExpired, setIsExpired] = useState(false);
   const [previousWinner, setPreviousWinner] = useState<any>(null);
@@ -241,9 +243,6 @@ export default function LotteryCard({
     };
   }, [prize.id, prize.drawDate, prize.winner]);
 
-  const totalTickets =
-    Number(prize.totalTickets) || 3500;
-
   // Calculate 90% baseline for pre-sold tickets
   const baselineSold = Math.floor(totalTickets * 0.90);
   const soldTickets = baselineSold + approvedTickets;
@@ -448,6 +447,18 @@ export default function LotteryCard({
             <span className="ml-2 text-emerald-300">
 
               {remainingTickets}
+
+            </span>
+
+          </div>
+
+          <div className="text-sm font-bold text-slate-300">
+
+            Participants:
+
+            <span className="ml-2 text-emerald-300">
+
+              {participants}
 
             </span>
 
