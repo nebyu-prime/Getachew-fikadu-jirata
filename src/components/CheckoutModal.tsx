@@ -238,7 +238,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                         ${isSelected
                           ? 'bg-red-500 border-red-400 text-white scale-110'
                           : isUnavailable
-                          ? 'bg-red-400/50 border-red-400 text-red-200 cursor-not-allowed'
+                          ? 'bg-red-600/70 border-red-500 text-red-100 cursor-not-allowed opacity-60'
                           : 'bg-white/10 border-white/20 text-slate-300 hover:bg-white/20 hover:border-white/30'
                         }
                       `}
