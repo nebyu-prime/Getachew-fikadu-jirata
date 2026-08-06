@@ -452,18 +452,6 @@ export default function LotteryCard({
 
           </div>
 
-          <div className="text-sm font-bold text-slate-300">
-
-            Participants:
-
-            <span className="ml-2 text-emerald-300">
-
-              {participants}
-
-            </span>
-
-          </div>
-
           {winner && (
             <div className="mt-4 rounded-xl bg-yellow-400/10 border border-yellow-400/30 p-4">
               <p className="text-xs font-bold text-yellow-300 uppercase tracking-wider mb-2">
