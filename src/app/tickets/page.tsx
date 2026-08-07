@@ -131,7 +131,7 @@ export default function TicketsPage(){
 
           process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ||
 
-          '6765c172002d08b3b5b6'
+          '6a76554c003c80feea3a'
 
         );
 
@@ -156,14 +156,14 @@ export default function TicketsPage(){
 
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID ||
 
-          '6765f6f3001120e42a14',
+          '6a76555e000eab75c13b',
 
 
 
 
           process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID ||
 
-          '6765f9fb0002879b1a46',
+          'payment_tickets',
 
 
 
@@ -277,28 +277,18 @@ export default function TicketsPage(){
     
     loadTickets(phoneToUse || '');
 
-    const interval =
-
-      setInterval(()=>{
-
-
-        loadTickets(phoneToUse || '');
-
-
-      },30000);
+    // Disabled polling to prevent exceeding database read limits
+    // const interval = setInterval(()=>{
+    //   loadTickets(phoneToUse || '');
+    // },30000);
 
 
 
 
 
     return ()=>{
-
-
-      clearInterval(interval);
-
-
+      // clearInterval(interval); // Disabled polling
     };
-
 
   },[activeQuery]);
 

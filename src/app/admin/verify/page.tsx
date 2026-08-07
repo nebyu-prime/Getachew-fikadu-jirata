@@ -72,31 +72,20 @@ export default function VerifyPage() {
 
       const storage = new Storage(client);
 
-
-      const response =
-
-        await (databases as any).listDocuments(
-
-
+      let response;
+      try {
+        response = await (databases as any).listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-
-
           process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID!,
-
-
-          [
-
-            Query.equal(
-              'status',
-              'Pending'
-            )
-
-
-
-          ]
-
-
+          [Query.equal('status', 'Pending')]
         );
+      } catch (error) {
+        console.error('Load pending tickets error:', error);
+        // If database fetch fails, show empty list
+        setTickets([]);
+        setLoading(false);
+        return;
+      }
 
 
 
@@ -111,7 +100,7 @@ export default function VerifyPage() {
           try {
             console.log('Fetching screenshot for ticket:', ticket.$id, 'fileId:', ticket.screenshot);
             screenshotUrl = await storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6765f8a9003adaa6d724',
+              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6a76564800384f6aa185',
               ticket.screenshot
             );
             console.log('Screenshot URL fetched:', screenshotUrl);
@@ -181,22 +170,10 @@ export default function VerifyPage() {
     loadTickets();
 
 
-    const timer =
-
-      setInterval(
-        loadTickets,
-        5000
-      );
-
-
-
-    return ()=>{
-
-
-      clearInterval(timer);
-
-
-    };
+    // Disable polling to prevent exceeding database read limits
+    // Uncomment the line below if you need auto-refresh (increased to 60 seconds):
+    // const timer = setInterval(loadTickets, 60000);
+    // return () => clearInterval(timer);
 
 
   },[]);

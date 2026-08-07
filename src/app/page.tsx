@@ -43,72 +43,65 @@ export default function HomePage() {
         Storage
       } = (window as any).Appwrite;
       const client = new Client()
-
-        .setEndpoint(
-          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ||
-          'https://fra.cloud.appwrite.io/v1'
-        )
-
-        .setProject(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID ||
-          '6a7629d30027db049390'
-        );
-      const databases =
-        new Databases(client);
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
+      const databases = new Databases(client);
 
 
       const storage =
         new Storage(client);
       const response =
         await (databases as any).listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID ||
-          '6a7629f800264f38a751',
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID ||
-          'cars'
-
-
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID,
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID
         );
+
+      console.log('HomePage: Raw documents from Appwrite:', response.documents);
+      console.log('HomePage: Total documents fetched:', response.documents.length);
+      console.log('HomePage: Document attributes:', response.documents.length > 0 ? Object.keys(response.documents[0]) : 'No documents');
       
       // Use TICKET PROJECT to fetch tickets
       const ticketClient = new Client()
         .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6765c172002d08b3b5b6');
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a');
       const ticketDatabases = new Databases(ticketClient);
       
-      // Fetch all tickets to count sold tickets per car
-      const ticketsResponse = await (ticketDatabases as any).listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6765f6f3001120e42a14',
-        process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || '6765f9fb0002879b1a46'
-      );
+      // Count tickets per car (optional - if this fails, cars will still show with 0 actual sales)
+      let ticketCounts: Record<string, number> = {};
+      let participantCounts: Record<string, Set<string>> = {};
       
-      // Count tickets per car
-      const ticketCounts: Record<string, number> = {};
-      const participantCounts: Record<string, Set<string>> = {};
-      ticketsResponse.documents.forEach((ticket: any) => {
-        if (ticket.carId && ticket.status === 'Approved') {
-          ticketCounts[ticket.carId] = (ticketCounts[ticket.carId] || 0) + 1;
-          if (!participantCounts[ticket.carId]) {
-            participantCounts[ticket.carId] = new Set();
+      try {
+        const ticketsResponse = await (ticketDatabases as any).listDocuments(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
+          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets'
+        );
+        
+        ticketsResponse.documents.forEach((ticket: any) => {
+          if (ticket.carId && ticket.status === 'Approved') {
+            ticketCounts[ticket.carId] = (ticketCounts[ticket.carId] || 0) + 1;
+            if (!participantCounts[ticket.carId]) {
+              participantCounts[ticket.carId] = new Set();
+            }
+            participantCounts[ticket.carId].add(ticket.phone);
           }
-          participantCounts[ticket.carId].add(ticket.phone);
-        }
-      });
-      console.log('HomePage: ticketCounts:', ticketCounts);
-      console.log('HomePage: participantCounts:', Object.fromEntries(Object.entries(participantCounts).map(([k, v]) => [k, v.size])));
+        });
+        console.log('HomePage: ticketCounts:', ticketCounts);
+        console.log('HomePage: participantCounts:', Object.fromEntries(Object.entries(participantCounts).map(([k, v]) => [k, v.size])));
+      } catch (ticketError) {
+        console.error('HomePage: Failed to fetch tickets (will show 0 actual sales):', ticketError);
+        // Continue without ticket data - cars will show with just the 90% baseline
+      }
       
       const formattedLotteries =
 
         response.documents.map((lottery:any)=>{
+          console.log('HomePage: Processing lottery:', lottery.$id, lottery.carName);
           let photo = '';
           if(lottery.carPhoto){
             photo =
               storage.getFileView(
-
-                process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID ||
-                '6a762aa0003c3fbbdac5',
-
+                process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
                 lottery.carPhoto
-
               ).toString();
 
           }
@@ -121,7 +114,7 @@ export default function HomePage() {
           const actualSold = ticketCounts[lottery.$id] || 0;
           const soldTickets = baselineSold + actualSold;
           const participants = baselineSold + (participantCounts[lottery.$id]?.size || 0);
-          console.log(`Lottery: ${lottery.carName}, totalTickets: ${totalTickets}, baseline: ${baselineSold}, actual: ${actualSold}, total sold: ${soldTickets}, participants: ${participants}`);
+          console.log(`Lottery: ${lottery.carName}, totalTickets: ${totalTickets}, baseline: ${baselineSold}, actual: ${actualSold}, total sold: ${soldTickets}, participants: ${participants}, isActive: ${lottery.isActive}`);
           return {
             id:
               lottery.$id,
@@ -162,10 +155,10 @@ export default function HomePage() {
             drawDate:
               lottery.drawDate,
             isActive:
-              lottery.isActive,
+              lottery.isActive !== undefined ? lottery.isActive : true,
 
             isFeatured:
-              lottery.isFeatured,
+              lottery.isFeatured !== undefined ? lottery.isFeatured : false,
 
 
           };
@@ -173,6 +166,8 @@ export default function HomePage() {
 
         });
       setLotteries(formattedLotteries);
+      console.log('HomePage: Total lotteries fetched:', formattedLotteries.length);
+      console.log('HomePage: Lottery details:', formattedLotteries.map(l => ({ id: l.id, name: l.carName, isActive: l.isActive, isFeatured: l.isFeatured })));
     }
 
     catch(error){
@@ -181,27 +176,8 @@ export default function HomePage() {
         error
       );
 
-      // Fallback to sample data if Appwrite fails
-      const futureDate = new Date();
-      futureDate.setDate(futureDate.getDate() + 30); // 30 days from now
-      
-      setLotteries([
-        {
-          id: 'sample-1',
-          carName: 'Toyota Land Cruiser',
-          description: '2024 Model - Fully Loaded',
-          carPhoto: '',
-          ticketPrice: 1000,
-          totalTickets: 3500,
-          soldTickets: 3150,
-          remainingTickets: 350,
-          participants: 3150,
-          progress: 90,
-          drawDate: futureDate.toISOString().split('T')[0],
-          isActive: true,
-          isFeatured: true,
-        }
-      ]);
+      // Don't use fallback sample data - show empty state instead
+      setLotteries([]);
 
 
     }
@@ -220,20 +196,13 @@ export default function HomePage() {
 
 
     fetchLotteries();
-    const interval =
-
-      setInterval(()=>{
-        fetchLotteries();
-
-
-      },30000);
+    // Disabled polling to prevent exceeding database read limits
+    // const interval = setInterval(()=>{
+    //   fetchLotteries();
+    // },30000);
 
     return ()=>{
-
-
-      clearInterval(interval);
-
-
+      // clearInterval(interval); // Disabled polling
     };
 
 
@@ -246,18 +215,23 @@ export default function HomePage() {
 
   const featuredLotteryIds = new Set(featuredLotteries.map(l => l.id));
 
+  console.log('HomePage: Featured lotteries:', featuredLotteries.map(l => ({ id: l.id, name: l.carName })));
+  console.log('HomePage: Filter type:', filter);
+
   const filteredLotteries =
 
     lotteries.filter((lottery)=>{
 
 
-      if(!lottery.isActive)
-
+      if(!lottery.isActive) {
+        console.log(`HomePage: Filtering out ${lottery.carName} - not active (isActive: ${lottery.isActive})`);
         return false;
+      }
 
-      if(featuredLotteryIds.has(lottery.id))
-
+      if(featuredLotteryIds.has(lottery.id)) {
+        console.log(`HomePage: Filtering out ${lottery.carName} - already featured`);
         return false;
+      }
 
       if(filter === 'popular'){
 
@@ -273,10 +247,14 @@ export default function HomePage() {
         return lotteryDate >= sevenDaysAgo;
       }
 
+      console.log(`HomePage: Including ${lottery.carName} in filtered list`);
       return true;
 
 
     });
+
+  console.log('HomePage: Filtered lotteries count:', filteredLotteries.length);
+  console.log('HomePage: Filtered lottery details:', filteredLotteries.map(l => ({ id: l.id, name: l.carName, isActive: l.isActive, isFeatured: l.isFeatured })));
 
   return (
 

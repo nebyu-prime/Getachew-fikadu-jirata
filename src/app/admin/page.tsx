@@ -42,7 +42,7 @@ export default function AdminPage() {
           try {
             console.log('Fetching screenshot for ticket:', ticket.$id, 'fileId:', ticket.screenshot);
             screenshotUrl = await storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6765f8a9003adaa6d724',
+              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6a76564800384f6aa185',
               ticket.screenshot
             );
             console.log('Screenshot URL fetched:', screenshotUrl);

@@ -62,15 +62,15 @@ export default function NotificationPanel() {
           const { Client, Databases, Query } = (window as any).Appwrite;
           const client = new Client()
             .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6765c172002d08b3b5b6');
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a');
           const databases = new Databases(client);
 
           const currentUserPhone = localStorage.getItem('user_phone');
 
           if (currentUserPhone) {
             const response = await (databases as any).listDocuments(
-              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6765f6f3001120e42a14',
-              process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || '6765f9fb0002879b1a46',
+              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
+              process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets',
               [
                 (Query as any).equal('phone', currentUserPhone),
                 (Query as any).equal('status', 'Approved')
@@ -120,8 +120,8 @@ export default function NotificationPanel() {
 
     loadNotifications();
 
-    // Refresh notifications every 5 seconds
-    const interval = setInterval(loadNotifications, 5000);
+    // Disabled polling to prevent exceeding database read limits
+    // const interval = setInterval(loadNotifications, 5000);
 
     // Listen for winner selected event
     const handleWinnerSelected = (event: any) => {
@@ -132,7 +132,7 @@ export default function NotificationPanel() {
     window.addEventListener('winnerSelected', handleWinnerSelected);
 
     return () => {
-      clearInterval(interval);
+      // clearInterval(interval); // Disabled polling
       window.removeEventListener('winnerSelected', handleWinnerSelected);
     };
   }, [previousTicketStatuses]);

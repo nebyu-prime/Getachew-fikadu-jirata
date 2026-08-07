@@ -31,30 +31,36 @@ export default function AdminCarsPage() {
         const { Client, Databases, Storage } = (window as any).Appwrite;
         
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
         
         const databases = new Databases(client);
         const storage = new Storage(client);
 
         const response = await databases.listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars'
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID,
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID
         );
+
+        console.log('Fetched raw documents from Appwrite:', response.documents);
+        console.log('Total documents fetched:', response.documents.length);
+        console.log('Document attributes:', response.documents.length > 0 ? Object.keys(response.documents[0]) : 'No documents');
 
         const formattedCars = response.documents.map((car: any) => {
           let photo = '';
           if (car.carPhoto) {
             photo = storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '6a762aa0003c3fbbdac5',
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
               car.carPhoto
             ).toString();
           }
-          return {
+          const formattedCar = {
             ...car,
             id: car.$id,
             carPhoto: photo,
           };
+          console.log('Formatted car:', formattedCar);
+          return formattedCar;
         });
 
         setCars(formattedCars);
@@ -111,16 +117,16 @@ export default function AdminCarsPage() {
         const { Client, Databases, Storage } = (window as any).Appwrite;
         
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
         
         const databases = new Databases(client);
         const storage = new Storage(client);
 
         // Delete the document
         await databases.deleteDocument(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars',
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID,
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID,
           carId
         );
 
@@ -128,7 +134,7 @@ export default function AdminCarsPage() {
         if (photoId) {
           try {
             await storage.deleteFile(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '6a762aa0003c3fbbdac5',
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
               photoId
             );
           } catch (photoError) {
@@ -168,8 +174,8 @@ export default function AdminCarsPage() {
         
         // Use CAR PROJECT for car operations
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
         
         const databases = new Databases(client);
         const storage = new Storage(client);
@@ -179,7 +185,7 @@ export default function AdminCarsPage() {
         if (formData.carPhoto) {
           try {
             const uploadedFile = await storage.createFile(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '6a762aa0003c3fbbdac5',
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
               ID.unique(),
               formData.carPhoto
             );
@@ -199,15 +205,26 @@ export default function AdminCarsPage() {
         const isoDate = utcDate.toISOString();
         console.log('Storing drawDate (UTC):', isoDate, 'Original local time:', formData.drawTime);
 
-        const carDatabaseId = process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751';
-        const lotteriesCollectionId = process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars';
-        const carProjectId = process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390';
-        console.log('Creating lottery document - Project:', carProjectId, 'Database:', carDatabaseId, 'Collection:', lotteriesCollectionId);
+        const carDatabaseId = process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID;
+        const lotteriesCollectionId = process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID;
+        const carProjectId = process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID;
         
-        const totalTickets = Number(formData.totalTickets);
+        const totalTickets = formData.totalTickets;
         
         // Truncate carName to 20 characters to meet Appwrite schema validation
         const truncatedCarName = formData.carName.substring(0, 20);
+        
+        console.log('Creating lottery document - Project:', carProjectId, 'Database:', carDatabaseId, 'Collection:', lotteriesCollectionId);
+        console.log('Document data:', {
+          carName: truncatedCarName,
+          description: formData.description,
+          ticketPrice: Number(formData.ticketPrice),
+          totalTickets: totalTickets,
+          drawDate: isoDate,
+          carPhoto: photoFileId,
+          isActive: formData.isActive,
+          isFeatured: formData.isFeatured,
+        });
         
         const carDocument = await databases.createDocument(
           carDatabaseId,
@@ -216,8 +233,8 @@ export default function AdminCarsPage() {
           {
             carName: truncatedCarName,
             description: formData.description,
-            ticketPrice: Number(formData.ticketPrice),
-            totalTickets: totalTickets,
+            ticketPrice: parseInt(formData.ticketPrice),
+            totalTickets: parseInt(formData.totalTickets),
             drawDate: isoDate,
             carPhoto: photoFileId,
             isActive: formData.isActive,
@@ -226,8 +243,10 @@ export default function AdminCarsPage() {
         );
         
         console.log(`Created car with ${totalTickets} total tickets`);
+        console.log('Created car document:', carDocument);
 
-        setMessage('Car added successfully!');
+        setMessage('Car added successfully to database!');
+        console.log('Car upload successful, calling fetchCars to refresh list');
         setFormData({
           carName: '',
           description: '',
@@ -240,7 +259,24 @@ export default function AdminCarsPage() {
           carPhoto: null,
         });
         
-        // Save to localStorage as fallback
+        fetchCars(); // Refresh the list
+      }
+    } catch (error: any) {
+      console.error('Error adding car:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
+      
+      // Show more detailed error message
+      let errorMessage = 'Failed to add car to database. ';
+      if (error?.message) {
+        errorMessage += `Error: ${error.message}`;
+      }
+      if (error?.code) {
+        errorMessage += ` (Code: ${error.code})`;
+      }
+      setMessage(errorMessage);
+      
+      // Try to save to localStorage as fallback if database fails
+      try {
         const newCar = {
           id: 'local_' + Date.now(),
           carName: formData.carName,
@@ -257,19 +293,11 @@ export default function AdminCarsPage() {
         const allCars = storedCars ? JSON.parse(storedCars) : [];
         allCars.push(newCar);
         localStorage.setItem('admin_cars', JSON.stringify(allCars));
-        
-        fetchCars(); // Refresh the list
+        console.log('Car saved to localStorage as fallback');
+        setMessage(errorMessage + ' (Saved locally as fallback)');
+      } catch (localError) {
+        console.error('Failed to save to localStorage:', localError);
       }
-    } catch (error: any) {
-      console.error('Error adding car:', error);
-      console.error('Error details:', error?.message, error?.response);
-      
-      // Show more detailed error message
-      let errorMessage = 'Failed to add car. Please try again.';
-      if (error?.message) {
-        errorMessage += ` Error: ${error.message}`;
-      }
-      setMessage(errorMessage);
     } finally {
       setLoading(false);
     }

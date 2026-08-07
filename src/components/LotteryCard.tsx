@@ -39,13 +39,13 @@ export default function LotteryCard({
               process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1'
             )
             .setProject(
-              process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6765c172002d08b3b5b6'
+              process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a'
             );
           const databases = new Databases(client);
           const result =
             await (databases as any).listDocuments(
-              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6765f6f3001120e42a14',
-              process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || '6765f9fb0002879b1a46',
+              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
+              process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets',
               [
                 Query.equal(
                   'carId',
@@ -113,11 +113,11 @@ export default function LotteryCard({
               const { Client, Databases, ID } = (window as any).Appwrite;
               const carClient = new Client()
                 .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-                .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
+                .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a763444003c46bbc085');
               const carDatabases = new Databases(carClient);
               await carDatabases.updateDocument(
-                process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
-                process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars',
+                process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7636c700306e4c0200',
+                process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '6a7637300026fd93b315',
                 prize.$id || prize.id,
                 {
                   winner: JSON.stringify(winnerInfo)
@@ -179,11 +179,11 @@ export default function LotteryCard({
                 const { Client, Databases } = (window as any).Appwrite;
                 const client = new Client()
                   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-                  .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
+                  .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a763444003c46bbc085');
                 const databases = new Databases(client);
                 await databases.updateDocument(
-                  process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
-                  process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars',
+                  process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7636c700306e4c0200',
+                  process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '6a7637300026fd93b315',
                   prize.$id || prize.id,
                   {
                     winner: winnerInfo
@@ -230,14 +230,12 @@ export default function LotteryCard({
 
     fetchApprovedTickets();
 
-    const interval = setInterval(
-      fetchApprovedTickets,
-      30000
-    );
+    // Disabled polling to prevent exceeding database read limits
+    // const interval = setInterval(fetchApprovedTickets, 30000);
     return () => {
 
       mounted = false;
-      clearInterval(interval);
+      // clearInterval(interval); // Disabled polling
       clearInterval(expirationInterval);
 
     };
