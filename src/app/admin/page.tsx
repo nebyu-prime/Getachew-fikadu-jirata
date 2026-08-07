@@ -129,14 +129,14 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-white">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="min-h-screen bg-slate-900 text-white p-8">
       {notification && (
         <div className={`fixed top-4 right-4 px-6 py-4 rounded-lg ${
           notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
@@ -167,13 +167,13 @@ export default function AdminPage() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Pending Payment Verifications</h2>
           {tickets.length === 0 ? (
-            <div className="bg-[#1a1a1a] rounded-lg p-8 text-center">
+            <div className="bg-slate-800 rounded-lg p-8 text-center">
               <p className="text-slate-400">No pending tickets to verify</p>
             </div>
           ) : (
             <div className="grid gap-6">
               {tickets.map((ticket) => (
-                <div key={ticket.id} className="bg-[#1a1a1a] rounded-lg p-6">
+                <div key={ticket.id} className="bg-slate-800 rounded-lg p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm text-slate-400 mb-1">Full Name</p>

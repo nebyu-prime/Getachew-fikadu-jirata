@@ -52,7 +52,7 @@ export default function ProfilePage() {
               rounded-[22px]
               border
               border-emerald-400/20
-              bg-black
+              bg-[linear-gradient(135deg,#0f5132,#0b3f2a)]
               px-4
               py-4
               shadow-[0_20px_60px_rgba(0,0,0,0.35)]

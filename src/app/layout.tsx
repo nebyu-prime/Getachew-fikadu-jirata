@@ -52,8 +52,17 @@ export default function RootLayout({
             relative
             min-h-screen
             overflow-hidden
-            bg-black
+            bg-[radial-gradient(circle_at_top,_rgba(29,78,216,0.36),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(245,196,81,0.18),_transparent_28%),linear-gradient(180deg,#020617_0%,#0f172a_44%,#020617_100%)]
           ">
+
+            <div className="
+              absolute
+              inset-0
+              bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)]
+              bg-[size:42px_42px]
+              opacity-30
+            " />
+
 
             <div className="
               relative

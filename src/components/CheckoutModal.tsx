@@ -58,18 +58,12 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
       const soldCount = Math.floor(totalTickets * 0.90);
       const allNumbers = Array.from({ length: totalTickets }, (_, i) => i + 1);
       
-      console.log('Total tickets:', totalTickets);
-      console.log('Sold count (90%):', soldCount);
-      console.log('Lottery ID:', lottery.id || lottery.$id);
-      
       // Use lottery ID as seed for consistent random numbers
       const seed = lottery.id || lottery.$id || 'default';
       let seedValue = 0;
       for (let i = 0; i < seed.length; i++) {
         seedValue += seed.charCodeAt(i);
       }
-      
-      console.log('Seed value:', seedValue);
       
       // Simple seeded random shuffle
       const shuffled = [...allNumbers];
@@ -80,9 +74,6 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
       }
       
       const preSoldNumbers = shuffled.slice(0, soldCount);
-      console.log('Pre-sold numbers count:', preSoldNumbers.length);
-      console.log('First 10 pre-sold:', preSoldNumbers.slice(0, 10));
-      
       preSoldNumbers.forEach(num => unavailable.add(num));
       
       // Also fetch actually sold tickets from database
@@ -115,7 +106,6 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
     }
     
     setUnavailableNumbers(unavailable);
-    console.log('Final unavailable numbers count:', unavailable.size);
     setIsLoadingNumbers(false);
   };
 
@@ -219,7 +209,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-black p-6 text-white">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 p-6 text-white">
         {step === 'numbers' && (
           <>
             <h2 className="mb-4 text-2xl font-black">Select Your Lucky Numbers</h2>
@@ -233,7 +223,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-yellow-400 border-t-transparent"></div>
               </div>
             ) : (
-              <div className="mb-4 grid grid-cols-10 gap-1 max-h-48 overflow-y-auto bg-black p-2 rounded-lg">
+              <div className="mb-4 grid grid-cols-10 gap-1 max-h-48 overflow-y-auto">
                 {Array.from({ length: totalTickets }, (_, i) => i + 1).map((num) => {
                   const isSelected = selectedNumbers.includes(num);
                   const isUnavailable = unavailableNumbers.has(num);
@@ -246,10 +236,10 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                       className={`
                         aspect-square rounded border text-xs font-bold transition-all
                         ${isSelected
-                          ? 'bg-[#5C1F22] border-[#D84A4A] text-[#D84A4A] scale-110'
+                          ? 'bg-red-500 border-red-400 text-white scale-110'
                           : isUnavailable
-                          ? 'bg-[#5C1F22] border-[#D84A4A] text-[#D84A4A] cursor-not-allowed'
-                          : 'bg-[#3B3B3B] border-[#3B3B3B] text-gray-400 hover:bg-[#4B4B4B] hover:border-[#5B5B5B]'
+                          ? 'bg-red-500 border-red-400 text-white cursor-not-allowed opacity-50'
+                          : 'bg-white/10 border-white/20 text-slate-300 hover:bg-white/20 hover:border-white/30'
                         }
                       `}
                     >
@@ -260,7 +250,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
               </div>
             )}
             
-            <div className="mb-6 rounded-xl bg-[#1a1a1a] p-4">
+            <div className="mb-6 rounded-xl bg-white/5 p-4">
               <p className="text-sm text-slate-400">Total Amount</p>
               <p className="text-3xl font-black text-yellow-400">
                 {selectedNumbers.length * lottery.ticketPrice} ETB
@@ -281,13 +271,13 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
         {step === 'details' && (
           <>
             <h2 className="mb-4 text-2xl font-black">{lottery.carName}</h2>
-            <div className="mb-6 rounded-xl bg-[#1a1a1a] p-4">
+            <div className="mb-6 rounded-xl bg-white/5 p-4">
               <p className="text-sm text-slate-400">{selectedNumbers.length} Tickets × {lottery.ticketPrice} Birr</p>
               <p className="text-3xl font-black text-yellow-400 mt-1">
                 {selectedNumbers.length * lottery.ticketPrice} Birr
               </p>
             </div>
-            <div className="mb-6 rounded-xl bg-[#1a1a1a] p-4">
+            <div className="mb-6 rounded-xl bg-white/5 p-4">
               <p className="text-sm text-slate-400 mb-2">Your Ticket Number</p>
               <p className="text-2xl font-black text-white">#{selectedNumbers[0]}</p>
             </div>
@@ -298,7 +288,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                 placeholder="Enter your full name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full rounded-xl bg-[#1a1a1a] p-4 outline-none"
+                className="w-full rounded-xl bg-white/10 p-4 outline-none"
               />
             </div>
             <div className="mb-6">
@@ -308,13 +298,13 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                 placeholder="+2519xxxxxxxx"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-full rounded-xl bg-[#1a1a1a] p-4 outline-none"
+                className="w-full rounded-xl bg-white/10 p-4 outline-none"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('numbers')}
-                className="flex-1 rounded-xl bg-[#1a1a1a] py-4 font-bold"
+                className="flex-1 rounded-xl bg-white/10 py-4 font-bold"
               >
                 Back
               </button>
@@ -340,7 +330,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                   className={`w-full rounded-xl p-4 text-left font-bold transition ${
                     paymentMethod === method
                       ? 'bg-yellow-400 text-slate-950'
-                      : 'bg-[#1a1a1a] hover:bg-[#2a2a2a]'
+                      : 'bg-white/10 hover:bg-white/20'
                   }`}
                 >
                   {method}
@@ -350,7 +340,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('details')}
-                className="flex-1 rounded-xl bg-[#1a1a1a] py-4 font-bold"
+                className="flex-1 rounded-xl bg-white/10 py-4 font-bold"
               >
                 Back
               </button>
@@ -369,10 +359,10 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
           <>
             <h2 className="mb-4 text-2xl font-black">Proof of Payment</h2>
             
-            <div className="mb-6 rounded-xl bg-[#1a1a1a] border border-blue-500/30 p-4">
+            <div className="mb-6 rounded-xl bg-blue-900/30 border border-blue-500/30 p-4">
               <p className="mb-3 text-sm font-bold text-blue-300">Payment Details</p>
               {paymentMethod === 'Telebirr' ? (
-                <div className="rounded-lg bg-[#2a2a2a] p-3">
+                <div className="rounded-lg bg-white/5 p-3">
                   <p className="mb-2 font-bold text-yellow-400">Telebirr</p>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -418,7 +408,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                   </div>
                 </div>
               ) : (
-                <div className="rounded-lg bg-[#2a2a2a] p-3">
+                <div className="rounded-lg bg-white/5 p-3">
                   <p className="mb-2 font-bold text-yellow-400">Commercial Bank of Ethiopia</p>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -473,14 +463,14 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
                 type="file"
                 accept="image/png,image/jpeg"
                 onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
-                className="w-full rounded-xl bg-[#1a1a1a] p-4 outline-none"
+                className="w-full rounded-xl bg-white/10 p-4 outline-none"
               />
             </div>
             <p className="mb-6 text-sm text-slate-400">After transferring the money, upload your payment receipt or transaction screenshot.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('payment')}
-                className="flex-1 rounded-xl bg-[#1a1a1a] py-4 font-bold"
+                className="flex-1 rounded-xl bg-white/10 py-4 font-bold"
               >
                 Back
               </button>
@@ -509,7 +499,7 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
               <h2 className="mb-2 text-2xl font-black">Purchase Successful!</h2>
               <p className="text-slate-400">Your tickets have been purchased</p>
             </div>
-            <div className="mb-6 rounded-xl bg-[#1a1a1a] p-4">
+            <div className="mb-6 rounded-xl bg-white/5 p-4">
               <p className="text-sm text-slate-400 mb-2">Your Lucky Numbers:</p>
               <div className="flex flex-wrap gap-2 justify-center">
                 {generatedTickets.map((ticket) => (

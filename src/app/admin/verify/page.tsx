@@ -394,7 +394,7 @@ export default function VerifyPage() {
 
       min-h-screen
 
-      bg-black
+      bg-[#071a14]
 
       p-5
 

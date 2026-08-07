@@ -61,7 +61,7 @@ export default function Header() {
         justify-between
         border-b
         border-white/10
-        bg-black
+        bg-slate-950/90
         px-4
         py-3
         backdrop-blur-md

@@ -27,9 +27,9 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center p-4">
+    <main className="min-h-screen bg-[#071a14] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="rounded-3xl border border-white/10 bg-[#1a1a1a] p-8">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
           <h1 className="mb-6 text-3xl font-black text-yellow-300 text-center">
             Admin Login
           </h1>
@@ -43,7 +43,7 @@ export default function AdminLogin() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50"
+                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50"
                 placeholder="Enter admin password"
                 required
               />
