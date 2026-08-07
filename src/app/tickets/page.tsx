@@ -679,7 +679,7 @@ export default function TicketsPage(){
               <div
                 className="
                 rounded-3xl
-                bg-white/5
+                bg-[#1a1a1a]
                 p-10
                 text-center
                 text-slate-300
@@ -714,7 +714,7 @@ export default function TicketsPage(){
                 rounded-3xl
                 border
                 border-white/10
-                bg-[#111820]
+                bg-black
                 p-4
                 shadow-lg
                 "
@@ -870,7 +870,7 @@ export default function TicketsPage(){
                   <div
                     className="
                     rounded-xl
-                    bg-white/5
+                    bg-[#1a1a1a]
                     p-3
                     "
                   >
@@ -892,7 +892,7 @@ export default function TicketsPage(){
                   <div
                     className="
                     rounded-xl
-                    bg-white/5
+                    bg-[#1a1a1a]
                     p-3
                     "
                   >
@@ -933,7 +933,7 @@ export default function TicketsPage(){
               <div
                 className="
                 rounded-3xl
-                bg-white/5
+                bg-[#1a1a1a]
                 p-10
                 text-center
                 "

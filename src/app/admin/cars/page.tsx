@@ -276,7 +276,7 @@ export default function AdminCarsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#071a14] p-5 pb-32 text-white">
+    <main className="min-h-screen bg-black p-5 pb-32 text-white">
       <div className="mx-auto max-w-2xl">
         <h1 className="mb-6 text-3xl font-black text-yellow-300">
           Add New Car
@@ -284,13 +284,13 @@ export default function AdminCarsPage() {
         <div className="flex gap-3 mb-6">
           <a
             href="/admin/verify"
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-300 hover:bg-white/10 transition-all"
+            className="rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-2 text-sm font-bold text-slate-300 hover:bg-[#2a2a2a] transition-all"
           >
             Verify Payments
           </a>
           <a
             href="/"
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-300 hover:bg-white/10 transition-all"
+            className="rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-2 text-sm font-bold text-slate-300 hover:bg-[#2a2a2a] transition-all"
           >
             Home
           </a>
@@ -299,7 +299,7 @@ export default function AdminCarsPage() {
               document.cookie = 'admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
               window.location.href = '/admin/login';
             }}
-            className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-bold text-red-300 hover:bg-red-500/20 transition-all"
+            className="rounded-xl border border-red-500/30 bg-[#1a1a1a] px-4 py-2 text-sm font-bold text-red-300 hover:bg-[#2a2a2a] transition-all"
           >
             Logout
           </button>
@@ -315,7 +315,7 @@ export default function AdminCarsPage() {
               required
               value={formData.carName}
               onChange={(e) => setFormData({ ...formData, carName: e.target.value })}
-              className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50"
+              className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50"
               placeholder="e.g., Toyota Land Cruiser"
             />
           </div>
@@ -328,7 +328,7 @@ export default function AdminCarsPage() {
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full h-24 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50 resize-none"
+              className="w-full h-24 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50 resize-none"
               placeholder="Car description..."
             />
           </div>
@@ -343,7 +343,7 @@ export default function AdminCarsPage() {
                 required
                 value={formData.ticketPrice}
                 onChange={(e) => setFormData({ ...formData, ticketPrice: e.target.value })}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50"
+                className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50"
                 placeholder="1000"
               />
             </div>
@@ -357,7 +357,7 @@ export default function AdminCarsPage() {
                 required
                 value={formData.totalTickets}
                 onChange={(e) => setFormData({ ...formData, totalTickets: e.target.value })}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50"
+                className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50"
                 placeholder="3500"
               />
             </div>
@@ -373,7 +373,7 @@ export default function AdminCarsPage() {
                 required
                 value={formData.drawDate}
                 onChange={(e) => setFormData({ ...formData, drawDate: e.target.value })}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50"
+                className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50"
               />
             </div>
 
@@ -386,7 +386,7 @@ export default function AdminCarsPage() {
                 required
                 value={formData.drawTime}
                 onChange={(e) => setFormData({ ...formData, drawTime: e.target.value })}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50"
+                className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50"
               />
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function AdminCarsPage() {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="w-full h-12 rounded-xl border border-white/10 bg-white/5 px-4 text-white outline-none focus:border-yellow-400/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400/20 file:text-yellow-300 file:cursor-pointer"
+              className="w-full h-12 rounded-xl border border-white/10 bg-[#1a1a1a] px-4 text-white outline-none focus:border-yellow-400/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400/20 file:text-yellow-300 file:cursor-pointer"
             />
           </div>
 
@@ -409,7 +409,7 @@ export default function AdminCarsPage() {
                 type="checkbox"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="w-5 h-5 rounded border-white/10 bg-white/5 accent-yellow-400"
+                className="w-5 h-5 rounded border-white/10 bg-[#1a1a1a] accent-yellow-400"
               />
               <span className="text-sm text-slate-300">Active</span>
             </label>
@@ -419,7 +419,7 @@ export default function AdminCarsPage() {
                 type="checkbox"
                 checked={formData.isFeatured}
                 onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                className="w-5 h-5 rounded border-white/10 bg-white/5 accent-yellow-400"
+                className="w-5 h-5 rounded border-white/10 bg-[#1a1a1a] accent-yellow-400"
               />
               <span className="text-sm text-slate-300">Featured</span>
             </label>
@@ -459,18 +459,18 @@ export default function AdminCarsPage() {
           </div>
           <div className="space-y-4">
             {loadingCars && cars.length === 0 ? (
-              <div className="rounded-xl bg-white/5 p-8 text-center text-slate-400">
+              <div className="rounded-xl bg-[#1a1a1a] p-8 text-center text-slate-400">
                 Loading cars...
               </div>
             ) : cars.length === 0 ? (
-              <div className="rounded-xl bg-white/5 p-8 text-center text-slate-400">
+              <div className="rounded-xl bg-[#1a1a1a] p-8 text-center text-slate-400">
                 No cars added yet
               </div>
             ) : (
               cars.map((car) => (
                 <div
                   key={car.id}
-                  className="flex items-center gap-4 rounded-xl bg-white/5 p-4 border border-white/10"
+                  className="flex items-center gap-4 rounded-xl bg-[#1a1a1a] p-4 border border-white/10"
                 >
                   {car.carPhoto && (
                     <img
