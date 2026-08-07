@@ -51,7 +51,7 @@ export default function HomePage() {
 
         .setProject(
           process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID ||
-          '672ff168000cbe773d3b'
+          '6a7629d30027db049390'
         );
       const databases =
         new Databases(client);
@@ -62,9 +62,9 @@ export default function HomePage() {
       const response =
         await (databases as any).listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID ||
-          '67308bd3000e40a80649',
+          '6a7629f800264f38a751',
           process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID ||
-          '67308be1002a84336ce9'
+          'cars'
 
 
         );
@@ -105,7 +105,7 @@ export default function HomePage() {
               storage.getFileView(
 
                 process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID ||
-                '672ff8f80018710993c2',
+                '6a762aa0003c3fbbdac5',
 
                 lottery.carPhoto
 

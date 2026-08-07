@@ -32,21 +32,21 @@ export default function AdminCarsPage() {
         
         const client = new Client()
           .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '672ff168000cbe773d3b');
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
         
         const databases = new Databases(client);
         const storage = new Storage(client);
 
         const response = await databases.listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '67308bd3000e40a80649',
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '67308be1002a84336ce9'
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars'
         );
 
         const formattedCars = response.documents.map((car: any) => {
           let photo = '';
           if (car.carPhoto) {
             photo = storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '672ff8f80018710993c2',
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '6a762aa0003c3fbbdac5',
               car.carPhoto
             ).toString();
           }
@@ -112,15 +112,15 @@ export default function AdminCarsPage() {
         
         const client = new Client()
           .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '672ff168000cbe773d3b');
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
         
         const databases = new Databases(client);
         const storage = new Storage(client);
 
         // Delete the document
         await databases.deleteDocument(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '67308bd3000e40a80649',
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '67308be1002a84336ce9',
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars',
           carId
         );
 
@@ -128,7 +128,7 @@ export default function AdminCarsPage() {
         if (photoId) {
           try {
             await storage.deleteFile(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '672ff8f80018710993c2',
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '6a762aa0003c3fbbdac5',
               photoId
             );
           } catch (photoError) {
@@ -169,7 +169,7 @@ export default function AdminCarsPage() {
         // Use CAR PROJECT for car operations
         const client = new Client()
           .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '672ff168000cbe773d3b');
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
         
         const databases = new Databases(client);
         const storage = new Storage(client);
@@ -179,7 +179,7 @@ export default function AdminCarsPage() {
         if (formData.carPhoto) {
           try {
             const uploadedFile = await storage.createFile(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '672ff8f80018710993c2',
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID || '6a762aa0003c3fbbdac5',
               ID.unique(),
               formData.carPhoto
             );
@@ -199,9 +199,9 @@ export default function AdminCarsPage() {
         const isoDate = utcDate.toISOString();
         console.log('Storing drawDate (UTC):', isoDate, 'Original local time:', formData.drawTime);
 
-        const carDatabaseId = process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '67308bd3000e40a80649';
-        const lotteriesCollectionId = process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '67308be1002a84336ce9';
-        const carProjectId = process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '672ff168000cbe773d3b';
+        const carDatabaseId = process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751';
+        const lotteriesCollectionId = process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars';
+        const carProjectId = process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390';
         console.log('Creating lottery document - Project:', carProjectId, 'Database:', carDatabaseId, 'Collection:', lotteriesCollectionId);
         
         const totalTickets = Number(formData.totalTickets);

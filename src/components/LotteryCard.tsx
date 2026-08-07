@@ -113,11 +113,11 @@ export default function LotteryCard({
               const { Client, Databases, ID } = (window as any).Appwrite;
               const carClient = new Client()
                 .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-                .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '672ff168000cbe773d3b');
+                .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
               const carDatabases = new Databases(carClient);
               await carDatabases.updateDocument(
-                process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '67308bd3000e40a80649',
-                process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '67308be1002a84336ce9',
+                process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
+                process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars',
                 prize.$id || prize.id,
                 {
                   winner: JSON.stringify(winnerInfo)
@@ -179,11 +179,11 @@ export default function LotteryCard({
                 const { Client, Databases } = (window as any).Appwrite;
                 const client = new Client()
                   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-                  .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '672ff168000cbe773d3b');
+                  .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID || '6a7629d30027db049390');
                 const databases = new Databases(client);
                 await databases.updateDocument(
-                  process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '67308bd3000e40a80649',
-                  process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || '67308be1002a84336ce9',
+                  process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID || '6a7629f800264f38a751',
+                  process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID || 'cars',
                   prize.$id || prize.id,
                   {
                     winner: winnerInfo
