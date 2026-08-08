@@ -19,7 +19,7 @@ from telegram.ext import (
 
 
 TOKEN = "8989055949:AAH7JSCctR_KZUHFg22VJ64TExbat9CJfdE"
-WEBAPP_URL = "https://senator-commerce-moving.ngrok-free.dev"
+WEBAPP_URL = "https://getachew-fikadu-jirata.vercel.app"
 
 
 
@@ -165,7 +165,12 @@ async def receive_phone(
         "english"
     )
 
-
+    if language == "amharic":
+        message = "ስልክ ቁጥርዎን ተቀቃል ተውልዎ አልይ"
+    elif language == "oromo":
+        message = "Bilbilaa keessanii qoodaa dhufteessa."
+    else:
+        message = "Phone number received successfully."
 
     await update.message.reply_text(
         message,
