@@ -315,6 +315,15 @@ export default function LotteryCard({
           }
         }
 
+        @keyframes zoom-in-out {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+
         .animate-fade-in {
           animation: fadeIn 0.6s ease-out;
         }
@@ -335,6 +344,10 @@ export default function LotteryCard({
 
         .animate-float {
           animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-zoom-in-out {
+          animation: zoom-in-out 4s ease-in-out infinite;
         }
       `}</style>
 
@@ -380,6 +393,7 @@ export default function LotteryCard({
               transition-transform
               duration-500
               hover:scale-110
+              animate-zoom-in-out
             "
           />
 
