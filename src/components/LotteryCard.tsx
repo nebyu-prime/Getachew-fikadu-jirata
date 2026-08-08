@@ -324,6 +324,28 @@ export default function LotteryCard({
           }
         }
 
+        @keyframes bubble-float {
+          0%, 100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateY(-20px) scale(1.1);
+            opacity: 0.5;
+          }
+        }
+
+        @keyframes bubble-float-2 {
+          0%, 100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.2;
+          }
+          50% {
+            transform: translateY(-15px) scale(1.05);
+            opacity: 0.4;
+          }
+        }
+
         .animate-fade-in {
           animation: fadeIn 0.6s ease-out;
         }
@@ -349,6 +371,14 @@ export default function LotteryCard({
         .animate-zoom-in-out {
           animation: zoom-in-out 4s ease-in-out infinite;
         }
+
+        .animate-bubble {
+          animation: bubble-float 4s ease-in-out infinite;
+        }
+
+        .animate-bubble-2 {
+          animation: bubble-float-2 5s ease-in-out infinite;
+        }
       `}</style>
 
     <div
@@ -358,9 +388,9 @@ export default function LotteryCard({
         border
         border-white/10
         bg-gradient-to-br
-        from-teal-900
-        via-teal-800
-        to-teal-900
+        from-green-950
+        via-green-900
+        to-green-950
         shadow-2xl
         transition-all
         duration-300
@@ -368,6 +398,7 @@ export default function LotteryCard({
         hover:shadow-3xl
         hover:border-yellow-400/30
         animate-fade-in
+        relative
         ${
           featured
             ? 'ring-2 ring-yellow-400/40 animate-pulse-glow'
@@ -375,6 +406,12 @@ export default function LotteryCard({
         }
       `}
     >
+      {/* Bubbles */}
+      <div className="absolute top-10 left-10 w-8 h-8 rounded-full bg-yellow-400/30 animate-bubble blur-sm"></div>
+      <div className="absolute top-20 right-16 w-6 h-6 rounded-full bg-yellow-300/25 animate-bubble-2 blur-sm"></div>
+      <div className="absolute bottom-32 left-20 w-10 h-10 rounded-full bg-yellow-500/20 animate-bubble blur-sm" style={{animationDelay: '1s'}}></div>
+      <div className="absolute bottom-40 right-8 w-7 h-7 rounded-full bg-yellow-400/25 animate-bubble-2 blur-sm" style={{animationDelay: '2s'}}></div>
+      <div className="absolute top-40 left-32 w-5 h-5 rounded-full bg-yellow-300/30 animate-bubble blur-sm" style={{animationDelay: '0.5s'}}></div>
       <div
         className="
           relative
