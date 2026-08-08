@@ -167,7 +167,7 @@ export default function HomePage() {
         });
       setLotteries(formattedLotteries);
       console.log('HomePage: Total lotteries fetched:', formattedLotteries.length);
-      console.log('HomePage: Lottery details:', formattedLotteries.map(l => ({ id: l.id, name: l.carName, isActive: l.isActive, isFeatured: l.isFeatured })));
+      console.log('HomePage: Lottery details:', formattedLotteries.map((l: any) => ({ id: l.id, name: l.carName, isActive: l.isActive, isFeatured: l.isFeatured })));
     }
 
     catch(error){
@@ -213,9 +213,9 @@ export default function HomePage() {
     .filter(lottery => lottery.isActive)
     .slice(0, 2);
 
-  const featuredLotteryIds = new Set(featuredLotteries.map(l => l.id));
+  const featuredLotteryIds = new Set(featuredLotteries.map((l: any) => l.id));
 
-  console.log('HomePage: Featured lotteries:', featuredLotteries.map(l => ({ id: l.id, name: l.carName })));
+  console.log('HomePage: Featured lotteries:', featuredLotteries.map((l: any) => ({ id: l.id, name: l.carName })));
   console.log('HomePage: Filter type:', filter);
 
   const filteredLotteries =
@@ -254,7 +254,7 @@ export default function HomePage() {
     });
 
   console.log('HomePage: Filtered lotteries count:', filteredLotteries.length);
-  console.log('HomePage: Filtered lottery details:', filteredLotteries.map(l => ({ id: l.id, name: l.carName, isActive: l.isActive, isFeatured: l.isFeatured })));
+  console.log('HomePage: Filtered lottery details:', filteredLotteries.map((l: any) => ({ id: l.id, name: l.carName, isActive: l.isActive, isFeatured: l.isFeatured })));
 
   return (
 
