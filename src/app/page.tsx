@@ -282,16 +282,6 @@ export default function HomePage() {
           </div>
 
           {/* Featured Section */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
-                Featured Lotteries
-              </h2>
-              <span className="text-sm font-semibold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/30">
-                🔥 Hot
-              </span>
-            </div>
-
           {
             loading ? (
               <div
@@ -312,17 +302,29 @@ export default function HomePage() {
                 <p className="text-lg font-semibold text-white">Loading lotteries...</p>
                 <p className="text-sm text-slate-500 mt-2">Fetching the best prizes for you</p>
               </div>
-            ) : (
-              featuredLotteries.map((lottery) => (
-                <LotteryCard
-                  key={lottery.id}
-                  prize={lottery}
-                  featured
-                  showButtons
-                  phoneFromUrl={phoneFromUrl}
-                />
-              ))
-            )
+            ) : featuredLotteries.length > 0 ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
+                    Featured Lotteries
+                  </h2>
+                  <span className="text-sm font-semibold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/30">
+                    🔥 Hot
+                  </span>
+                </div>
+                {
+                  featuredLotteries.map((lottery) => (
+                    <LotteryCard
+                      key={lottery.id}
+                      prize={lottery}
+                      featured
+                      showButtons
+                      phoneFromUrl={phoneFromUrl}
+                    />
+                  ))
+                }
+              </div>
+            ) : null
           }
 
         
