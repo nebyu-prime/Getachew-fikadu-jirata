@@ -358,9 +358,9 @@ export default function LotteryCard({
         border
         border-white/10
         bg-gradient-to-br
-        from-emerald-600
-        via-emerald-500
-        to-emerald-600
+        from-teal-700
+        via-teal-600
+        to-teal-700
         shadow-2xl
         transition-all
         duration-300
