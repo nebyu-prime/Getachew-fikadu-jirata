@@ -55,11 +55,11 @@ export default function VerifyPage() {
         new Client()
 
         .setEndpoint(
-          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!
+          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim()
         )
 
         .setProject(
-          process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!
+          process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim()
         );
 
 
@@ -75,8 +75,8 @@ export default function VerifyPage() {
       let response;
       try {
         response = await (databases as any).listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID!,
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim(),
+          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim(),
           [Query.equal('status', 'Pending')]
         );
       } catch (error) {
@@ -100,7 +100,7 @@ export default function VerifyPage() {
           try {
             console.log('Fetching screenshot for ticket:', ticket.$id, 'fileId:', ticket.screenshot);
             screenshotUrl = await storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6a76564800384f6aa185',
+              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID?.trim() || '6a76564800384f6aa185',
               ticket.screenshot
             );
             console.log('Screenshot URL fetched:', screenshotUrl);
@@ -227,7 +227,7 @@ export default function VerifyPage() {
 
         .setEndpoint(
 
-          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!
+          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim()
 
         )
 
@@ -235,7 +235,7 @@ export default function VerifyPage() {
 
         .setProject(
 
-          process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!
+          process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim()
 
         );
 
@@ -255,10 +255,10 @@ export default function VerifyPage() {
       await (databases as any).updateDocument(
 
 
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim(),
 
 
-          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID!,
+          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim(),
 
 
           id,
@@ -282,7 +282,7 @@ export default function VerifyPage() {
         try {
           // Use CAR PROJECT for car operations
           const carClient = new Client()
-            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim())
             .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID!);
           const carDatabases = new Databases(carClient);
           

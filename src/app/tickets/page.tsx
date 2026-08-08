@@ -121,7 +121,7 @@ export default function TicketsPage(){
 
         .setEndpoint(
 
-          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ||
+          process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim() ||
 
           'https://fra.cloud.appwrite.io/v1'
 
@@ -129,7 +129,7 @@ export default function TicketsPage(){
 
         .setProject(
 
-          process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ||
+          process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim() ||
 
           '6a76554c003c80feea3a'
 
@@ -154,14 +154,14 @@ export default function TicketsPage(){
         await databases.listDocuments(
 
 
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID ||
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim() ||
 
           '6a76555e000eab75c13b',
 
 
 
 
-          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID ||
+          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim() ||
 
           'payment_tickets',
 

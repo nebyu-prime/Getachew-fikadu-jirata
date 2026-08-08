@@ -19,15 +19,15 @@ export default function AdminPage() {
       const { Client, Databases, Query, Storage } = (window as any).Appwrite;
 
       const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim()!)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim()!);
 
       const databases = new Databases(client);
       const storage = new Storage(client);
 
       const response = await (databases as any).listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim()!,
+        process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim()!,
         [
           Query.equal('status', 'Pending')
         ]
@@ -42,7 +42,7 @@ export default function AdminPage() {
           try {
             console.log('Fetching screenshot for ticket:', ticket.$id, 'fileId:', ticket.screenshot);
             screenshotUrl = await storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6a76564800384f6aa185',
+              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID?.trim() || '6a76564800384f6aa185',
               ticket.screenshot
             );
             console.log('Screenshot URL fetched:', screenshotUrl);
@@ -81,14 +81,14 @@ export default function AdminPage() {
       const { Client, Databases } = (window as any).Appwrite;
 
       const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim()!)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim()!);
 
       const databases = new Databases(client);
 
       await (databases as any).updateDocument(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim()!,
+        process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim()!,
         id,
         {
           status: status

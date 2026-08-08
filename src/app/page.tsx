@@ -43,8 +43,8 @@ export default function HomePage() {
         Storage
       } = (window as any).Appwrite;
       const client = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim())
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID?.trim());
       const databases = new Databases(client);
 
 
@@ -52,8 +52,8 @@ export default function HomePage() {
         new Storage(client);
       const response =
         await (databases as any).listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID,
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID?.trim(),
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID?.trim()
         );
 
       console.log('HomePage: Raw documents from Appwrite:', response.documents);
@@ -62,8 +62,8 @@ export default function HomePage() {
       
       // Use TICKET PROJECT to fetch tickets
       const ticketClient = new Client()
-        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a');
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim() || 'https://fra.cloud.appwrite.io/v1')
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim() || '6a76554c003c80feea3a');
       const ticketDatabases = new Databases(ticketClient);
       
       // Count tickets per car (optional - if this fails, cars will still show with 0 actual sales)
@@ -72,8 +72,8 @@ export default function HomePage() {
       
       try {
         const ticketsResponse = await (ticketDatabases as any).listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
-          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets'
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim() || '6a76555e000eab75c13b',
+          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim() || 'payment_tickets'
         );
         
         ticketsResponse.documents.forEach((ticket: any) => {

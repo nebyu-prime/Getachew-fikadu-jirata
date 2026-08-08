@@ -61,16 +61,16 @@ export default function NotificationPanel() {
         if (typeof window !== 'undefined' && (window as any).Appwrite) {
           const { Client, Databases, Query } = (window as any).Appwrite;
           const client = new Client()
-            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a');
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim() || 'https://fra.cloud.appwrite.io/v1')
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim() || '6a76554c003c80feea3a');
           const databases = new Databases(client);
 
           const currentUserPhone = localStorage.getItem('user_phone');
 
           if (currentUserPhone) {
             const response = await (databases as any).listDocuments(
-              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
-              process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets',
+              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim() || '6a76555e000eab75c13b',
+              process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim() || 'payment_tickets',
               [
                 (Query as any).equal('phone', currentUserPhone),
                 (Query as any).equal('status', 'Approved')

@@ -80,13 +80,13 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
       if (typeof window !== 'undefined' && (window as any).Appwrite) {
         const { Client, Databases, Query } = (window as any).Appwrite;
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a');
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim() || 'https://fra.cloud.appwrite.io/v1')
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim() || '6a76554c003c80feea3a');
         const databases = new Databases(client);
 
         const response = await databases.listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
-          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets',
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim() || '6a76555e000eab75c13b',
+          process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim() || 'payment_tickets',
           [
             Query.equal('carId', lottery.id || lottery.$id),
             Query.equal('status', ['Pending', 'Approved'])
@@ -131,8 +131,8 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
         console.log('Appwrite available');
         const { Client, Databases, ID, Storage } = (window as any).Appwrite;
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1')
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '6a76554c003c80feea3a');
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim() || 'https://fra.cloud.appwrite.io/v1')
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID?.trim() || '6a76554c003c80feea3a');
         const databases = new Databases(client);
         const storage = new Storage(client);
 
@@ -144,9 +144,9 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
         let screenshotFileId = null;
         if (paymentProof) {
           try {
-            console.log('Starting screenshot upload to bucket:', process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6a76564800384f6aa185');
+            console.log('Starting screenshot upload to bucket:', process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID?.trim() || '6a76564800384f6aa185');
             const file = await storage.createFile(
-              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '6a76564800384f6aa185',
+              process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID?.trim() || '6a76564800384f6aa185',
               ID.unique(),
               paymentProof
             );
@@ -169,8 +169,8 @@ export default function CheckoutModal({ isOpen, onClose, lottery, phoneFromUrl }
 
           console.log('Creating ticket:', ticketNumber);
           await databases.createDocument(
-            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '6a76555e000eab75c13b',
-            process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID || 'payment_tickets',
+            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID?.trim() || '6a76555e000eab75c13b',
+            process.env.NEXT_PUBLIC_APPWRITE_TICKETS_COLLECTION_ID?.trim() || 'payment_tickets',
             ID.unique(),
             {
               fullName,

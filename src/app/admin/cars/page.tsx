@@ -31,15 +31,15 @@ export default function AdminCarsPage() {
         const { Client, Databases, Storage } = (window as any).Appwrite;
         
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim())
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID?.trim());
         
         const databases = new Databases(client);
         const storage = new Storage(client);
 
         const response = await databases.listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID,
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID?.trim(),
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID?.trim()
         );
 
         console.log('Fetched raw documents from Appwrite:', response.documents);
@@ -50,7 +50,7 @@ export default function AdminCarsPage() {
           let photo = '';
           if (car.carPhoto) {
             photo = storage.getFileView(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID?.trim(),
               car.carPhoto
             ).toString();
           }
@@ -117,16 +117,16 @@ export default function AdminCarsPage() {
         const { Client, Databases, Storage } = (window as any).Appwrite;
         
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim())
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID?.trim());
         
         const databases = new Databases(client);
         const storage = new Storage(client);
 
         // Delete the document
         await databases.deleteDocument(
-          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID,
-          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID,
+          process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID?.trim(),
+          process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID?.trim(),
           carId
         );
 
@@ -134,7 +134,7 @@ export default function AdminCarsPage() {
         if (photoId) {
           try {
             await storage.deleteFile(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID?.trim(),
               photoId
             );
           } catch (photoError) {
@@ -174,8 +174,8 @@ export default function AdminCarsPage() {
         
         // Use CAR PROJECT for car operations
         const client = new Client()
-          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
-          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID);
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT?.trim())
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID?.trim());
         
         const databases = new Databases(client);
         const storage = new Storage(client);
@@ -185,7 +185,7 @@ export default function AdminCarsPage() {
         if (formData.carPhoto) {
           try {
             const uploadedFile = await storage.createFile(
-              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID,
+              process.env.NEXT_PUBLIC_APPWRITE_CAR_STORAGE_BUCKET_ID?.trim(),
               ID.unique(),
               formData.carPhoto
             );
@@ -205,9 +205,9 @@ export default function AdminCarsPage() {
         const isoDate = utcDate.toISOString();
         console.log('Storing drawDate (UTC):', isoDate, 'Original local time:', formData.drawTime);
 
-        const carDatabaseId = process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID;
-        const lotteriesCollectionId = process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID;
-        const carProjectId = process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID;
+        const carDatabaseId = process.env.NEXT_PUBLIC_APPWRITE_CAR_DATABASE_ID?.trim();
+        const lotteriesCollectionId = process.env.NEXT_PUBLIC_APPWRITE_LOTTERIES_COLLECTION_ID?.trim();
+        const carProjectId = process.env.NEXT_PUBLIC_APPWRITE_CAR_PROJECT_ID?.trim();
         
         const totalTickets = formData.totalTickets;
         
