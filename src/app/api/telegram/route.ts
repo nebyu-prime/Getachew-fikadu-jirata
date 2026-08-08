@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const message = body.message;
     const callbackQuery = body.callback_query;
-    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
 
     if (!botToken) {
       console.error('TELEGRAM_BOT_TOKEN not set');
@@ -156,12 +156,14 @@ async function answerCallbackQuery(botToken: string, callbackQueryId: string) {
 
 // Handle webhook setup GET request
 export async function GET(req: NextRequest) {
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL;
+  const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL?.trim();
 
   if (!botToken || !webhookUrl) {
-    return NextResponse.json({ 
-      error: 'TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_URL must be set' 
+    return NextResponse.json({
+      error: 'TELEGRAM_BOT_TOKEN and TELEGRAM_WEBHOOK_URL must be set',
+      hasToken: !!botToken,
+      hasWebhook: !!webhookUrl
     }, { status: 400 });
   }
 
@@ -176,6 +178,6 @@ export async function GET(req: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to set webhook' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to set webhook', details: String(error) }, { status: 500 });
   }
 }
