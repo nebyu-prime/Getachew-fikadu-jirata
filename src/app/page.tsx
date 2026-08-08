@@ -271,16 +271,6 @@ export default function HomePage() {
           pt-6
           "
         >
-          {/* Hero Section */}
-          <div className="text-center py-8">
-            <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 mb-3">
-              Win Your Dream Car
-            </h1>
-            <p className="text-slate-400 text-lg">
-              Premium lottery experience with amazing prizes
-            </p>
-          </div>
-
           {/* Featured Section */}
           {
             loading ? (
@@ -303,15 +293,7 @@ export default function HomePage() {
                 <p className="text-sm text-slate-500 mt-2">Fetching the best prizes for you</p>
               </div>
             ) : featuredLotteries.length > 0 ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
-                    Featured Lotteries
-                  </h2>
-                  <span className="text-sm font-semibold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/30">
-                    🔥 Hot
-                  </span>
-                </div>
+              <div className="space-y-5">
                 {
                   featuredLotteries.map((lottery) => (
                     <LotteryCard
