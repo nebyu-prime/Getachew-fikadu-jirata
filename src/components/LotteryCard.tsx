@@ -354,20 +354,23 @@ export default function LotteryCard({
     <div
       className={`
         overflow-hidden
-        rounded-[28px]
+        rounded-[32px]
         border
         border-white/10
-        bg-[#064b3c]
+        bg-gradient-to-br
+        from-slate-900
+        via-slate-800
+        to-slate-900
         shadow-2xl
         transition-all
         duration-300
         hover:scale-[1.02]
         hover:shadow-3xl
-        hover:border-yellow-400/20
+        hover:border-yellow-400/30
         animate-fade-in
         ${
           featured
-            ? 'ring-1 ring-yellow-400/30 animate-pulse-glow'
+            ? 'ring-2 ring-yellow-400/40 animate-pulse-glow'
             : ''
         }
       `}

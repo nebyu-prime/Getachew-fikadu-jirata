@@ -61,10 +61,14 @@ export default function Header() {
         justify-between
         border-b
         border-white/10
-        bg-slate-950/90
+        bg-gradient-to-r
+        from-slate-950/95
+        via-slate-900/95
+        to-slate-950/95
         px-4
         py-3
-        backdrop-blur-md
+        backdrop-blur-xl
+        shadow-lg
         sm:px-6
       "
     >
@@ -85,16 +89,20 @@ export default function Header() {
         <div
           className="
             flex
-            h-10
-            w-10
+            h-12
+            w-12
             items-center
             justify-center
             rounded-2xl
             border
             border-yellow-400/40
-            bg-yellow-400/10
-            text-xl
+            bg-gradient-to-br
+            from-yellow-400/20
+            to-yellow-600/20
+            text-2xl
             text-yellow-300
+            shadow-lg
+            shadow-yellow-400/20
           "
         >
 
@@ -110,9 +118,13 @@ export default function Header() {
 
           <p
             className="
-              text-sm
+              text-base
               font-black
-              text-yellow-300
+              text-transparent
+              bg-clip-text
+              bg-gradient-to-r
+              from-yellow-300
+              to-yellow-500
             "
           >
 
@@ -124,8 +136,10 @@ export default function Header() {
 
           <p
             className="
-              text-[11px]
+              text-xs
+              font-semibold
               text-slate-400
+              tracking-wide
             "
           >
 
@@ -170,9 +184,12 @@ export default function Header() {
             rounded-xl
             border
             border-white/10
-            bg-white/5
+            bg-gradient-to-br
+            from-white/10
+            to-white/5
             px-2
             py-1.5
+            shadow-md
           "
         >
 
@@ -198,11 +215,13 @@ export default function Header() {
             className="
               cursor-pointer
               bg-transparent
-              text-[11px]
+              text-xs
               font-bold
               uppercase
               text-slate-300
               outline-none
+              hover:text-yellow-300
+              transition-colors
             "
 
           >
