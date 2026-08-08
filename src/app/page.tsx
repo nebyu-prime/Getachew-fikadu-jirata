@@ -273,15 +273,29 @@ export default function HomePage() {
         >
 
           {
-            featuredLotteries.map((lottery) => (
-              <LotteryCard
-                key={lottery.id}
-                prize={lottery}
-                featured
-                showButtons
-                phoneFromUrl={phoneFromUrl}
-              />
-            ))
+            loading ? (
+              <div
+                className="
+                rounded-3xl
+                bg-white/5
+                p-10
+                text-center
+                text-slate-400
+                "
+              >
+                Loading lotteries...
+              </div>
+            ) : (
+              featuredLotteries.map((lottery) => (
+                <LotteryCard
+                  key={lottery.id}
+                  prize={lottery}
+                  featured
+                  showButtons
+                  phoneFromUrl={phoneFromUrl}
+                />
+              ))
+            )
           }
 
         
@@ -336,13 +350,8 @@ export default function HomePage() {
             </div>
 
             {
-              loading ?
-
-
-              (
-
+              loading ? (
                 <div
-
                   className="
                   rounded-3xl
                   bg-white/5
@@ -350,55 +359,38 @@ export default function HomePage() {
                   text-center
                   text-slate-400
                   "
-
                 >
-
                   Loading lotteries...
-
                 </div>
-
-
-              )
-              :
-              filteredLotteries.length === 0 ?
-              (
+              ) : filteredLotteries.length === 0 ? (
                 <div
-
                   className="
                   rounded-3xl
                   bg-white/5
                   p-10
                   text-center
                   "
-
                 >
-
                   <div className="text-5xl">
-
                     🎟️
-
                   </div>
                   <h3 className="text-lg font-bold text-white">
-
                     No active lotteries
-
                   </h3>
                   <p className="mt-2 text-slate-400">
-
                     Additional lotteries can be added from the admin panel.
-
                   </p>
                 </div>
+              ) : (
+                filteredLotteries.map((lottery)=>(
+                  <LotteryCard
+                    key={lottery.id}
+                    prize={lottery}
+                    showButtons
+                    phoneFromUrl={phoneFromUrl}
+                  />
+                ))
               )
-              :
-              filteredLotteries.map((lottery)=>(
-                <LotteryCard
-                  key={lottery.id}
-                  prize={lottery}
-                  showButtons
-                  phoneFromUrl={phoneFromUrl}
-                />
-              ))
             }
           </section>
         </div>
