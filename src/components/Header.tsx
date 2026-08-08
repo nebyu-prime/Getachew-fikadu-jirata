@@ -128,7 +128,7 @@ export default function Header() {
             "
           >
 
-            Getachew Fikadu
+            Getachew
 
           </p>
 
