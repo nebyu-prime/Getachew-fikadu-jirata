@@ -168,6 +168,8 @@ export default function AdminCarsPage() {
     setLoading(true);
     setMessage('');
 
+    let photoFileId = '';
+
     try {
       if (typeof window !== 'undefined' && (window as any).Appwrite) {
         const { Client, Databases, Storage, ID } = (window as any).Appwrite;
@@ -179,8 +181,6 @@ export default function AdminCarsPage() {
         
         const databases = new Databases(client);
         const storage = new Storage(client);
-
-        let photoFileId = '';
 
         if (formData.carPhoto) {
           try {
