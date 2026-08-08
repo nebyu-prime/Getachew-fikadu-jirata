@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const chatId = message.chat.id;
     const text = message.text || '';
 
-    // Handle commands
+    // Handle commands - prioritize /start
     if (text === '/start') {
       await sendMessageWithKeyboard(botToken, chatId,
         '🚗 Getachew Fikadu Jirata\n\n' +
@@ -65,8 +65,11 @@ export async function POST(req: NextRequest) {
           ]
         ]
       );
-    } else if (text.match(/^\+?[0-9]{9,15}$/)) {
-      // Handle phone number input
+      return NextResponse.json({ ok: true });
+    }
+
+    // Handle phone number input
+    if (text.match(/^\+?[0-9]{9,15}$/)) {
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://getachew-fikadu-jirata.vercel.app';
       await sendMessageWithKeyboard(botToken, chatId,
         '✅ Phone number received!\n\n' +
@@ -77,7 +80,11 @@ export async function POST(req: NextRequest) {
           ]
         ]
       );
-    } else if (text === '/help') {
+      return NextResponse.json({ ok: true });
+    }
+
+    // Handle other commands
+    if (text === '/help') {
       await sendMessage(botToken, chatId,
         '📖 Available commands:\n\n' +
         '/start - Get started\n' +
@@ -85,7 +92,10 @@ export async function POST(req: NextRequest) {
         '/tickets - Check your tickets\n' +
         '/lotteries - View active lotteries'
       );
-    } else if (text === '/tickets') {
+      return NextResponse.json({ ok: true });
+    }
+
+    if (text === '/tickets') {
       await sendMessage(botToken, chatId,
         '🎟️ To check your tickets:\n' +
         '1. Visit our website\n' +
@@ -93,17 +103,21 @@ export async function POST(req: NextRequest) {
         '3. View your ticket status\n\n' +
         '🔗 ' + (process.env.NEXT_PUBLIC_SITE_URL || 'https://your-site.com/tickets')
       );
-    } else if (text === '/lotteries') {
+      return NextResponse.json({ ok: true });
+    }
+
+    if (text === '/lotteries') {
       await sendMessage(botToken, chatId,
         '🚗 View all active lotteries at:\n' +
         '🔗 ' + (process.env.NEXT_PUBLIC_SITE_URL || 'https://your-site.com')
       );
-    } else {
-      await sendMessage(botToken, chatId,
-        '❓ I didn\'t understand that command.\n' +
-        'Type /help to see available commands.'
-      );
+      return NextResponse.json({ ok: true });
     }
+
+    await sendMessage(botToken, chatId,
+      '❓ I didn\'t understand that command.\n' +
+      'Type /help to see available commands.'
+    );
 
     return NextResponse.json({ ok: true });
   } catch (error) {
@@ -114,7 +128,7 @@ export async function POST(req: NextRequest) {
 
 async function sendMessage(botToken: string, chatId: number, text: string) {
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-  
+
   await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
