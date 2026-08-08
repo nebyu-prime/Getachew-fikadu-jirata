@@ -266,6 +266,77 @@ export default function LotteryCard({
 
 
   return (
+    <>
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(250, 204, 21, 0.5);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            background-position: -200% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
+        }
+
+        @keyframes progress-fill {
+          from {
+            width: 0%;
+          }
+          to {
+            width: var(--progress-width);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        .animate-pulse-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .shimmer-effect {
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+          background-size: 200% 100%;
+          animation: shimmer 2s infinite;
+        }
+
+        .animate-progress {
+          animation: progress-fill 1.5s ease-out forwards;
+        }
+
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+      `}</style>
 
     <div
       className={`
@@ -275,9 +346,15 @@ export default function LotteryCard({
         border-white/10
         bg-[#064b3c]
         shadow-2xl
+        transition-all
+        duration-300
+        hover:scale-[1.02]
+        hover:shadow-3xl
+        hover:border-yellow-400/20
+        animate-fade-in
         ${
           featured
-            ? 'ring-1 ring-yellow-400/30'
+            ? 'ring-1 ring-yellow-400/30 animate-pulse-glow'
             : ''
         }
       `}
@@ -300,6 +377,9 @@ export default function LotteryCard({
               h-full
               w-full
               object-cover
+              transition-transform
+              duration-500
+              hover:scale-110
             "
           />
 
@@ -318,6 +398,7 @@ export default function LotteryCard({
               text-xs
               font-bold
               text-yellow-300
+              animate-float
             "
           >
             🔥 Featured
@@ -421,10 +502,13 @@ export default function LotteryCard({
                 bg-gradient-to-r
                 from-yellow-400
                 to-emerald-400
+                animate-progress
+                shimmer-effect
               "
               style={{
+                '--progress-width': `${percentage}%`,
                 width: `${percentage}%`,
-              }}
+              } as React.CSSProperties}
             />
 
           </div>
@@ -451,7 +535,7 @@ export default function LotteryCard({
           </div>
 
           {winner && (
-            <div className="mt-4 rounded-xl bg-yellow-400/10 border border-yellow-400/30 p-4">
+            <div className="mt-4 rounded-xl bg-yellow-400/10 border border-yellow-400/30 p-4 animate-fade-in animate-pulse-glow">
               <p className="text-xs font-bold text-yellow-300 uppercase tracking-wider mb-2">
                 🏆 Winner
               </p>
@@ -490,7 +574,9 @@ export default function LotteryCard({
 
 
     </div>
-
+    </>
   );
+
+}
 
 }
