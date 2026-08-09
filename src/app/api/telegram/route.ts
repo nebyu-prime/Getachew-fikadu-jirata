@@ -138,32 +138,54 @@ export async function POST(req: NextRequest) {
 async function sendMessage(botToken: string, chatId: number, text: string, options?: any) {
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-  await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: text,
-      parse_mode: 'HTML',
-      ...options
-    })
-  });
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'HTML',
+        ...options
+      })
+    });
+
+    const data = await response.json();
+    if (!data.ok) {
+      console.error('Telegram API error:', data);
+    }
+    return data;
+  } catch (error) {
+    console.error('Error sending message:', error);
+    throw error;
+  }
 }
 
 async function sendMessageWithKeyboard(botToken: string, chatId: number, text: string, keyboard: any[][]) {
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-  
-  await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: text,
-      reply_markup: {
-        inline_keyboard: keyboard
-      }
-    })
-  });
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        reply_markup: {
+          inline_keyboard: keyboard
+        }
+      })
+    });
+
+    const data = await response.json();
+    if (!data.ok) {
+      console.error('Telegram API error:', data);
+    }
+    return data;
+  } catch (error) {
+    console.error('Error sending message with keyboard:', error);
+    throw error;
+  }
 }
 
 async function answerCallbackQuery(botToken: string, callbackQueryId: string) {
