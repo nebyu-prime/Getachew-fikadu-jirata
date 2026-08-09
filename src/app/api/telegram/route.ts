@@ -182,11 +182,20 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // First, delete any existing webhook
+    const deleteUrl = `https://api.telegram.org/bot${botToken}/deleteWebhook`;
+    await fetch(deleteUrl, { method: 'POST' });
+
+    // Set the new webhook with proper settings
     const url = `https://api.telegram.org/bot${botToken}/setWebhook`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: webhookUrl })
+      body: JSON.stringify({
+        url: webhookUrl,
+        drop_pending_updates: true,
+        allowed_updates: ['message', 'callback_query']
+      })
     });
 
     const data = await response.json();
