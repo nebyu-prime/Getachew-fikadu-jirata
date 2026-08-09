@@ -201,22 +201,23 @@ export async function GET(req: NextRequest) {
     const deleteUrl = `https://api.telegram.org/bot${botToken}/deleteWebhook`;
     await fetch(deleteUrl, { method: 'POST' });
 
-    // Set the new webhook with proper settings
+    // Set the new webhook with proper settings - accept all updates
     const url = `https://api.telegram.org/bot${botToken}/setWebhook`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         url: webhookUrl,
-        drop_pending_updates: true,
-        allowed_updates: ['message', 'callback_query']
+        drop_pending_updates: true
+        // Don't restrict allowed_updates - accept all updates
       })
     });
 
     const data = await response.json();
     return NextResponse.json({
       webhookSet: data,
-      previousStatus: statusData
+      previousStatus: statusData,
+      message: 'Webhook reset to accept all updates from all users'
     });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to set webhook', details: String(error) }, { status: 500 });
