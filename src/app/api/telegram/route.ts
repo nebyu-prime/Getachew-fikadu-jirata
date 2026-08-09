@@ -16,27 +16,30 @@ export async function POST(req: NextRequest) {
     if (callbackQuery) {
       const callbackData = callbackQuery.data;
       const callbackChatId = callbackQuery.message.chat.id;
-      
+
       if (callbackData === 'lang_amharic') {
         await answerCallbackQuery(botToken, callbackQuery.id);
         await sendMessage(botToken, callbackChatId,
           'እንኳን እንነገርዎታለን! 🎉\n\n' +
-          'እባክዎ ስልክ ቁጥርዎን ይጻፉ።'
+          'እባክዎ ስልክ ቁጥርዎን ይጻፉ።',
+          { reply_markup: { remove_keyboard: true } }
         );
       } else if (callbackData === 'lang_english') {
         await answerCallbackQuery(botToken, callbackQuery.id);
         await sendMessage(botToken, callbackChatId,
           'Welcome! 🎉\n\n' +
-          'Please enter your phone number to continue.'
+          'Please enter your phone number to continue.',
+          { reply_markup: { remove_keyboard: true } }
         );
       } else if (callbackData === 'lang_oromo') {
         await answerCallbackQuery(botToken, callbackQuery.id);
         await sendMessage(botToken, callbackChatId,
           'Baga nagaan dhuftu! 🎉\n\n' +
-          'Fone bilbisa barreessuu.'
+          'Fone bilbisa barreessuu.',
+          { reply_markup: { remove_keyboard: true } }
         );
       }
-      
+
       return NextResponse.json({ ok: true });
     }
 
@@ -50,6 +53,18 @@ export async function POST(req: NextRequest) {
 
     // Handle commands - prioritize /start
     if (text === '/start') {
+      // Clear any existing keyboard first
+      await sendMessage(botToken, chatId,
+        '🚗 Getachew Fikadu Jirata\n\n' +
+        'Maaloo Afaan filadhaa.\n' +
+        '━━━━━━━━━━━━━━\n' +
+        'እባክዎ ቋንቋ ይምረጡ።\n' +
+        '━━━━━━━━━━━━━━\n' +
+        'Please select your language.',
+        { reply_markup: { remove_keyboard: true } }
+      );
+
+      // Then show the language selection
       await sendMessageWithKeyboard(botToken, chatId,
         '🚗 Getachew Fikadu Jirata\n\n' +
         'Maaloo Afaan filadhaa.\n' +
@@ -126,7 +141,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-async function sendMessage(botToken: string, chatId: number, text: string) {
+async function sendMessage(botToken: string, chatId: number, text: string, options?: any) {
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   await fetch(url, {
@@ -135,7 +150,8 @@ async function sendMessage(botToken: string, chatId: number, text: string) {
     body: JSON.stringify({
       chat_id: chatId,
       text: text,
-      parse_mode: 'HTML'
+      parse_mode: 'HTML',
+      ...options
     })
   });
 }
