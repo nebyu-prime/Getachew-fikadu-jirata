@@ -18,7 +18,7 @@ from telegram.ext import (
 )
 
 
-TOKEN = "8813445716:AAEL5MtHHsuQBSWbgAx-l9eBmjMSqLndalM"
+TOKEN = "8545212307:AAGNtdvdqATepIQM6QMu4--5BlOyJhRF1n0"
 WEBAPP_URL = "https://getachew-fikadu-jirata.vercel.app"
 
 
