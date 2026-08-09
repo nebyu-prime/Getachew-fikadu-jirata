@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    console.log('Telegram webhook received:', JSON.stringify(body));
+
     const message = body.message;
     const callbackQuery = body.callback_query;
     const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
@@ -53,18 +55,9 @@ export async function POST(req: NextRequest) {
 
     // Handle commands - prioritize /start
     if (text === '/start') {
-      // Clear any existing keyboard first
-      await sendMessage(botToken, chatId,
-        '🚗 Getachew Fikadu Jirata\n\n' +
-        'Maaloo Afaan filadhaa.\n' +
-        '━━━━━━━━━━━━━━\n' +
-        'እባክዎ ቋንቋ ይምረጡ።\n' +
-        '━━━━━━━━━━━━━━\n' +
-        'Please select your language.',
-        { reply_markup: { remove_keyboard: true } }
-      );
+      console.log('Processing /start command for chatId:', chatId);
 
-      // Then show the language selection
+      // Just show the language selection directly
       await sendMessageWithKeyboard(botToken, chatId,
         '🚗 Getachew Fikadu Jirata\n\n' +
         'Maaloo Afaan filadhaa.\n' +
@@ -80,6 +73,7 @@ export async function POST(req: NextRequest) {
           ]
         ]
       );
+      console.log('Successfully sent /start response');
       return NextResponse.json({ ok: true });
     }
 
@@ -198,6 +192,11 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // Check current webhook status first
+    const statusUrl = `https://api.telegram.org/bot${botToken}/getWebhookInfo`;
+    const statusResponse = await fetch(statusUrl);
+    const statusData = await statusResponse.json();
+
     // First, delete any existing webhook
     const deleteUrl = `https://api.telegram.org/bot${botToken}/deleteWebhook`;
     await fetch(deleteUrl, { method: 'POST' });
@@ -215,7 +214,10 @@ export async function GET(req: NextRequest) {
     });
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json({
+      webhookSet: data,
+      previousStatus: statusData
+    });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to set webhook', details: String(error) }, { status: 500 });
   }
